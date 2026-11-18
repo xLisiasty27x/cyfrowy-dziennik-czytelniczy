@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyfrowy Dziennik Czytelniczy</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Górna nawigacja (Oś i szprychy) -->
+    <header class="navbar">
+        <div class="logo">📚 Dziennik Czytelniczy</div>
+        <nav>
+            <button onclick="zmienEkran('start')" class="nav-btn active" id="btn-start">Start</button>
+            <button onclick="zmienEkran('katalog')" class="nav-btn" id="btn-katalog">Katalog</button>
+            <button onclick="zmienEkran('formularz')" class="nav-btn" id="btn-formularz">+ Dodaj książkę</button>
+        </nav>
+    </header>
+
+    <main class="container">
+
+        <!-- EKRAN 1: START -->
+        <section id="ekran-start" class="ekran">
+            <div class="hero">
+                <h1>Witaj w swoim Cyfrowym Dzienniku!</h1>
+                <p>Śledź swoje postępy czytelnicze, organizuj lektury i zarządzaj czasem na czytanie.</p>
+                <div class="action-tiles">
+                    <div class="tile" onclick="zmienEkran('katalog')">
+                        <h3>📖 Przeglądaj Katalog</h3>
+                        <p>Zobacz listę swoich książek i szczegóły.</p>
+                    </div>
+                    <div class="tile" onclick="zmienEkran('formularz')">
+                        <h3>✍️ Dodaj Nową Lekturę</h3>
+                        <p>Wprowadź nową pozycję do bazy.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EKRAN 2 & 3: KATALOG I SZCZEGÓŁY (Wybór dwupanelowy / Uszczegółowienie w jednym oknie) -->
+        <section id="ekran-katalog" class="ekran ukryty">
+            <h2>Katalog Lektur</h2>
+            <div class="split-view">
+                <!-- Panel lewy: Lista -->
+                <div class="list-panel">
+                    <div id="lista-ksiazek">
+                        <!-- Generowane dynamicznie przez JS -->
+                    </div>
+                </div>
+                <!-- Panel prawy: Szczegóły -->
+                <div class="details-panel" id="panel-szczegolow">
+                    <p class="placeholder-info">Wybierz książkę z listy po lewej, aby zobaczyć szczegóły.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- EKRAN 4: FORMULARZ Z WALIDACJĄ -->
+        <section id="ekran-formularz" class="ekran ukryty">
+            <h2>Dodaj Nową Książkę</h2>
+            <form id="ksiazka-form" onsubmit="dodajKsiazke(event)">
+                <div class="form-group">
+                    <label for="tytul">Tytuł książki *</label>
+                    <input type="text" id="tytul" placeholder="np. Wiedźmin: Ostatnie Życzenie">
+                    <small class="error-msg" id-error="tytul"></small>
+                </div>
+
+                <div class="form-group">
+                    <label for="autor">Autor *</label>
+                    <input type="text" id="autor" placeholder="np. Andrzej Sapkowski">
+                    <small class="error-msg" id-error="autor"></small>
+                </div>
+
+                <div class="form-group">
+                    <label for="status">Status czytania</label>
+                    <select id="status">
+                        <option value="Do przeczytania" selected>Do przeczytania (domyślnie)</option>
+                        <option value="W trakcie">W trakcie</option>
+                        <option value="Przeczytane">Przeczytane</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="data">Data dodania</label>
+                    <input type="date" id="data">
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Zapisz książkę</button>
+                    <button type="button" class="btn-secondary" onclick="zmienEkran('katalog')">Anuluj</button>
+                </div>
+            </form>
+        </section>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
