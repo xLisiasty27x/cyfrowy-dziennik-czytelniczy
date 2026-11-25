@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const dzis = new Date().toISOString().split('T')[0];
     const dataInput = document.getElementById('data');
     if (dataInput) dataInput.value = dzis;
-    
+
     renderujliste();
 });
 
@@ -61,17 +61,47 @@ function pokazSzczegoly(index) {
         <h3>Szczegóły lektury</h3>
         <p><strong>Tytuł:</strong> ${k.tytul}</p>
         <p><strong>Autor:</strong> ${k.autor}</p>
-        <p><strong>Status:</strong> ${k.status}</p>
+        <p><strong>Status:</strong> <span id="aktualny-status-tekst">${k.status}</span></p>
         <p><strong>Data dodania:</strong> ${k.data}</p>
-        <br>
-        <button class="btn-secondary" onclick="usunKsiazke(${index})" style="background-color: #fee2e2; color: #991b1b;">Usuń pozycję</button>
+
+        <div class="form-group" style="margin-top: 14px;">
+            <label for="select-status-${index}">Zmień status czytania</label>
+            <select id="select-status-${index}">
+                <option value="Do przeczytania" ${k.status === 'Do przeczytania' ? 'selected' : ''}>Do przeczytania</option>
+                <option value="W trakcie" ${k.status === 'W trakcie' ? 'selected' : ''}>W trakcie</option>
+                <option value="Przeczytane" ${k.status === 'Przeczytane' ? 'selected' : ''}>Przeczytane</option>
+            </select>
+        </div>
+
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px;">
+            <button class="btn-primary" onclick="zmienStatus(${index})">Edytuj status</button>
+            <button class="btn-secondary" onclick="usunKsiazke(${index})" style="background-color: #fee2e2; color: #991b1b;">Usuń pozycję</button>
+        </div>
+        <small id="status-potwierdzenie" style="display: block; margin-top: 8px; color: #166534;"></small>
     `;
+}
+
+// Zmiana statusu książki i zapis w localStorage
+function zmienStatus(index) {
+    const select = document.getElementById(`select-status-${index}`);
+    if (!select) return;
+
+    ksiazki[index].status = select.value;
+    localStorage.setItem('ksiazki', JSON.stringify(ksiazki));
+
+    renderujliste();
+    pokazSzczegoly(index);
+
+    const potwierdzenie = document.getElementById('status-potwierdzenie');
+    if (potwierdzenie) {
+        potwierdzenie.textContent = `Zapisano status: ${select.value}`;
+    }
 }
 
 // Dodawanie książki z walidacją (Zlokalizowane komunikaty błędów)
 function dodajKsiazke(e) {
     e.preventDefault();
-    
+
     const tytulInput = document.getElementById('tytul');
     const autorInput = document.getElementById('autor');
     const statusInput = document.getElementById('status');
